@@ -1,3 +1,6 @@
+# this is model for fix netP and mask only left eye, right eye, nose and skin
+# original loss
+
 import random
 import numpy as np
 import os
@@ -6,12 +9,12 @@ from . import networks
 import torch
 from torch import nn
 from torch.nn import init
-import torchvision as transforms
-import torchvision.transforms.functional as TF
+import torchvision.transforms as transforms
 # from pdb import set_trace as st
 # import heapq
 from numpy.linalg import solve
 import time
+
 
 class AE_Model(nn.Module):
     def name(self):
@@ -72,7 +75,7 @@ class AE_Model(nn.Module):
         input_image = input_image.transpose(2,0,1)
         input_image = np.expand_dims(input_image, axis=0)
         input_image = input_image.astype('float32')
-        input_image = TF.to_tensor(np.squeeze(input_image))
+        input_image = torch.from_numpy(np.array(input_image))
         # print(input_image.shape)
         mus_mouth = self.net_encoder(input_image)
 
@@ -92,7 +95,7 @@ class AE_Model(nn.Module):
 
     def get_inter(self, input_image, nearnN=3, sex=1,w_c=1,random_=-1):
         generated_f = self.get_latent(input_image)
-        generated_f = generated_f.numpy()
+        generated_f = generated_f.detach().numpy()
         
         feature_list = self.feature_list[sex]
         list_len = np.array([feature_list.shape[0]])
@@ -176,7 +179,7 @@ class AE_Model(nn.Module):
             # print(i)
             mus_vec = torch.unsqueeze(mus_mouth[[i],:],1)
 
-            fake_image = self.net_decoder(jt.array(mus_vec))
+            fake_image = self.net_decoder(np.array(mus_vec))
             # fake_image = fake_image[[0],:,:,:]
             if i==0:
                 fakes = (1-fake_image)/2* w_i

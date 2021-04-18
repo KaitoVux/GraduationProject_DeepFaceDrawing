@@ -1,5 +1,5 @@
 import time
-from CombineModel import CombineModel
+from combine_model import CombineModel
 import cv2
 import numpy as np
 import os

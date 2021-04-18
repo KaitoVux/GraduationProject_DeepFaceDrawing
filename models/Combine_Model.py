@@ -5,8 +5,7 @@ from . import networks
 import torch
 from torch import nn
 from torch.nn import init
-import torchvision
-from torchvision import transforms
+import torchvision.transforms as transforms
 
 class Combine_Model(nn.Module):
     def name(self):
