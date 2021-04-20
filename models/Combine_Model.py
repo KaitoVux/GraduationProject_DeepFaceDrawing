@@ -55,11 +55,11 @@ class Combine_Model(nn.Module):
         mouth_code = part_v['mouth']
         bg_code = part_v['']
         
-        eye1_r_feature = self.Decoder_Part['eye1'](eye1_code)
-        eye2_r_feature = self.Decoder_Part['eye2'](eye2_code)
-        nose_r_feature = self.Decoder_Part['nose'](nose_code)
-        mouth_r_feature = self.Decoder_Part['mouth'](mouth_code)
-        bg_r_feature = self.Decoder_Part[''](bg_code)
+        eye1_r_feature = self.Decoder_Part['eye1'](torch.from_numpy(eye1_code))
+        eye2_r_feature = self.Decoder_Part['eye2'](torch.from_numpy(eye2_code))
+        nose_r_feature = self.Decoder_Part['nose'](torch.from_numpy(nose_code))
+        mouth_r_feature = self.Decoder_Part['mouth'](torch.from_numpy(mouth_code))
+        bg_r_feature = self.Decoder_Part[''](torch.from_numpy(bg_code))
 
         bg_r_feature[:, :, 301:301 + 192, 169:169 + 192] = mouth_r_feature
         bg_r_feature[:, :, 232:232 + 160 - 36, 182:182 + 160] = nose_r_feature[:, :, :-36, :]

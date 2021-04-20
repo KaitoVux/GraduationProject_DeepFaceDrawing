@@ -197,7 +197,7 @@ class  EncoderGenerator_Res(nn.Module):
     def forward(self, ten):
         # ten = ten[:,:,:]
         # ten2 = jt.reshape(ten,[ten.size()[0],-1])
-        # print(ten.shape, ten2.shape)
+        # print(ten.shape, ten.dtype)
         ten = self.conv(ten)
         ten = torch.reshape(ten,[ten.size()[0],-1])
         # print(ten.shape,self.longsize)
@@ -342,7 +342,7 @@ class DecoderGenerator_feature_Res(nn.Module):
         # print(ten.size())
         ten = self.fc(ten)
         # print(ten.size())
-        ten = jt.reshape(ten,(ten.size()[0],512, self.latent_size, self.latent_size))
+        ten = torch.reshape(ten,(ten.size()[0],512, self.latent_size, self.latent_size))
         # print(ten.size())
         ten = self.conv(ten)
 
