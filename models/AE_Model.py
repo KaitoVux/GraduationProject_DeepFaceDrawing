@@ -108,8 +108,7 @@ class AE_Model(nn.Module):
               auto n=out_shape0, k=out_shape1;
               int N=@in2(0);
               
-              // 使用openmp实现自动并行化
-                // 存储k近邻的距离和下标
+
                 vector<pair<float,int>> id(N);
               #pragma omp parallel for
                 for (int j=0; j<N; j++) {
@@ -121,10 +120,10 @@ class AE_Model(nn.Module):
                     }
                     id[j] = {dis, j};
                 }
-                // 使用c++算法库的nth_element排序
+
                 nth_element(id.begin(), 
                   id.begin()+k, id.end());
-                // 将下标输出到计图的变量中
+
                 for (int j=0; j<k; j++)
                   @out(0,j) = id[j].second;
               """
