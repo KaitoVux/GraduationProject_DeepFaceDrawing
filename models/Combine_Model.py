@@ -2,10 +2,10 @@ import numpy as np
 import os
 from . import networks
 
-import torch
-from torch import nn
-from torch.nn import init
-import torchvision.transforms as transforms
+import jittor as jt
+from jittor import init
+from jittor import nn
+import jittor.transform as transform
 
 class Combine_Model(nn.Module):
     def name(self):

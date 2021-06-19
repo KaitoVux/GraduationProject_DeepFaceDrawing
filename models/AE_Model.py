@@ -6,10 +6,10 @@ import numpy as np
 import os
 from . import networks
 # from scipy.ndimage import median_filter
-import torch
-from torch import nn
-from torch.nn import init
-import torchvision.transforms as transforms
+import jittor as jt
+from jittor import init
+from jittor import nn
+import jittor.transform as transform
 # from pdb import set_trace as st
 # import heapq
 from numpy.linalg import solve
@@ -75,7 +75,7 @@ class AE_Model(nn.Module):
         input_image = input_image.transpose(2,0,1)
         input_image = np.expand_dims(input_image, axis=0)
         input_image = input_image.astype('float32')
-        input_image = torch.from_numpy(np.array(input_image))
+        input_image = transform.to_tensor(jt.array(input_image))
         # print(input_image.shape)
         mus_mouth = self.net_encoder(input_image)
 
@@ -95,13 +95,13 @@ class AE_Model(nn.Module):
 
     def get_inter(self, input_image, nearnN=3, sex=1,w_c=1,random_=-1):
         generated_f = self.get_latent(input_image)
-        generated_f = generated_f.detach().numpy()
+        generated_f = generated_f.numpy()
         
         feature_list = self.feature_list[sex]
-        list_len = np.array([feature_list.shape[0]])
+        list_len = jt.array([feature_list.shape[0]])
         # a = jt.random((n,3))
         b = jt.code([1, nearnN], 
-              "int32", [np.array(feature_list),np.array(generated_f), list_len], 
+              "int32", [jt.array(feature_list),jt.array(generated_f), list_len], 
         cpu_header="#include <algorithm>",
         cpu_src="""
               using namespace std;
@@ -162,7 +162,7 @@ class AE_Model(nn.Module):
         # print(time.time()- start_time)
 
         vec_mu = np.dot(A_m, xx).T * w_c + (1-w_c)* generated_f
-        vec_mu = np.array(vec_mu.astype('float32'))
+        vec_mu = jt.array(vec_mu.astype('float32'))
 
         return self.get_shadow_image(A_m.T,xx,nearnN), vec_mu
 
@@ -177,9 +177,9 @@ class AE_Model(nn.Module):
                 w_i = 0.5
 
             # print(i)
-            mus_vec = torch.unsqueeze(mus_mouth[[i],:],1)
+            mus_vec = jt.unsqueeze(mus_mouth[[i],:],1)
 
-            fake_image = self.net_decoder(np.array(mus_vec))
+            fake_image = self.net_decoder(jt.array(mus_vec))
             # fake_image = fake_image[[0],:,:,:]
             if i==0:
                 fakes = (1-fake_image)/2* w_i
