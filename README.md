@@ -43,7 +43,7 @@ python3.7 -m jittor.test.test_example
 -   Cài đặt
 
 ```
-sh install.sh
+sudo sh install.sh
 ```
 
 ## Cách sử dụng
