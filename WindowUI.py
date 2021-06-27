@@ -18,7 +18,6 @@ import jittor as jt
 jt.flags.use_cuda = 0
 
 class WindowUI(QtWidgets.QMainWindow,Ui_SketchGUI):
-
     def __init__(self):
         super(WindowUI, self).__init__()
         self.setupUi(self)

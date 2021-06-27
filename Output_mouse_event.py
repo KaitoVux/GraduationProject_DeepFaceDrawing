@@ -100,7 +100,7 @@ class OutputGraphicsScene(QGraphicsScene):
         if self.firstDisplay :
             self.reset_items()
             self.imItem = self.addPixmap(QPixmap.fromImage(qim))
-            self.firstDispla = False
+            self.firstDisplay = False
         else:
             self.imItem.setPixmap(QPixmap.fromImage(qim))
 
